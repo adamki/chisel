@@ -1,23 +1,49 @@
-# top level File IO
-handle_input = File.open(ARGV[0], 'r')
-# Read in MD File
-markdown_input = handle_input.read
-handle_input.close
+require "pry";
+require_relative 'paragraph'
+require_relative 'header'
+require_relative 'list'
+require_relative 'emphasize'
+require_relative 'ul'
+
+class Chisel
+  input = File.open(ARGV[0], 'r')
+  markdown = []
+  @markdown_input = input.each_line do |line|
+    markdown << line
+  end
 
 
-# send to parser
-# writes to output
-# communicates with parser
-
-output = File.open(ARGV[1] , 'w')
-output.write(markdown_input)  #eventually call a method that triggers parse.
-output.close
+  puts "==========markdown================================================================="
+  puts markdown
+  input.close
 
 
-#======================================================================================##
-#NOTES ON PARSER ... CAN NOT SAVE NOTES THERE AS FILE IO OVERWRITES IT EACH TIME FILE IO runs
-#======================================================================================##
-#ruby lib/chisel.rb input.md lib/parser.rb
-#======================================================================================##
-#parser will connect to all sort class/methods(prep,P,H,LI,AMP,etcetc)
-#use parser as a hub between key input/output <===> sorting suite
+  #sent to Paragraph Class..
+  example = Paragraph.new(markdown)
+  paragraph_parsed = example.add_p_tags
+
+  # Sent to Header Class...
+  example = Header.new(paragraph_parsed)
+  header_parsed = example.count_hashes
+
+
+  #sent to em/strong class
+  example = Emphasize.new(header_parsed)
+  style_parsed = example.replace_asterisk_for_em
+
+  # sent to lists class
+  example = List.new(style_parsed)
+  list_parsed = example.delete_md_lists_add_html
+
+  #sent to UL class
+  example = UnorderedList.new(list_parsed)
+  ul_parsed = example.ul_wrapper
+
+  puts "==========HTML================================================================="
+
+  puts ul_parsed
+
+  output = File.open(ARGV[1] , 'w')
+  output.write(ul_parsed)
+  output.close
+end
