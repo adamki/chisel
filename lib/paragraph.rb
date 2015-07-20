@@ -1,7 +1,7 @@
 require "pry";
 
 class Paragraph
-  
+
   def initialize(input)
     @input = input
   end
@@ -15,11 +15,10 @@ class Paragraph
         line.prepend("<p>").gsub("\n", "")
       end
       if line[-4,4].include?(".") || line[-2,2].include?(":")
-        line.insert(-3, "</p>")
+        line.insert(-2, "</p>\n")
       else
         line
       end
     end
   end
-
 end

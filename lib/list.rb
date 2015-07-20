@@ -10,7 +10,7 @@ class List
       if line.include?("**") == true
         line
       elsif line[0].to_i > 0
-        line.lstrip.reverse.chop!.chop!.strip.reverse.insert(0,"<li>").insert(-1 , "</li>")
+        line.lstrip.reverse.chop!.chop!.strip.reverse.insert(0,"<li>").insert(-1 , "</li>\n")
       elsif line[0] == "*"
         line.delete("* ").delete("\n").insert(0,"<li>").insert(-1 , "</li>")
       else

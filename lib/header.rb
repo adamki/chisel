@@ -9,7 +9,7 @@ class Header
     @input.map do |line|
       if line.include?("#")
         num = line.count("#")
-        line.gsub("#",'').prepend("<h#{num}>").gsub("\n","</h#{num}>")
+        line.gsub("#",'').prepend("<h#{num}>").gsub("\n","</h#{num}>\n\n")
       else
         line
       end
